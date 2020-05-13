@@ -1,0 +1,11 @@
+export const Primary_Description_column = "PRIMARYDESCRIPTIONCOL";
+export const Primary_Image_column = "PRIMARYIMAGECOL";
+export const Additional_Description_column = "ADDITIONALDESCRIPTIONCOL";
+export const Additional_Image_column = "ADDITIONALIMAGECOL";
+export const User_column = "USERCOL";
+export const UserI_mage_Column = "USERIMAGECOL";
+export const Question_Id_Column = "QUESTIONIDCOL";
+export const Answer_Id_column = "ANSWERIDCOL";
+export const Is_Correct_column = "ISCORRECTCOL";
+export const Rating_column = "RATINGCOL";
+export const Like_column = "LIKECOL";

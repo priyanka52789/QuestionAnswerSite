@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "question-and-answer-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/questionAndAnswer/QuestionAndAnswerWebPart.js",
+          "manifest": "./src/webparts/questionAndAnswer/QuestionAndAnswerWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "QuestionAndAnswerWebPartStrings": "lib/webparts/questionAndAnswer/loc/{locale}.js"
+  }
+}

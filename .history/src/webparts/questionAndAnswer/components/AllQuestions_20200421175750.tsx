@@ -1,0 +1,7 @@
+import * as React from "react";
+import styles from "./QuestionAndAnswer.module.scss";
+
+const AllQuestions = () => {
+  return <div className={styles.questionAndAnswer}>AllQuestions</div>;
+};
+export default AllQuestions;

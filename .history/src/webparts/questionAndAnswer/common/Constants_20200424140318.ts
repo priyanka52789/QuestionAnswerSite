@@ -1,0 +1,11 @@
+export const PrimaryDescriptionCol = "PRIMARYDESCRIPTIONCOL";
+export const PrimaryImageCol = "PRIMARYIMAGECOL";
+export const AdditionalDescriptionCol = "ADDITIONALDESCRIPTIONCOL";
+export const AdditionalImageCol = "ADDITIONALIMAGECOL";
+export const UserCol = "USERCOL";
+export const UserImageCol = "USERIMAGECOL";
+export const QuestionIdCol = "QUESTIONIDCOL";
+export const AnswerIdCol = "ANSWERIDCOL";
+export const IsCorrectCol = "ISCORRECTCOL";
+export const RatingCol = "RATINGCOL";
+export const LikeCol = "LIKECOL";

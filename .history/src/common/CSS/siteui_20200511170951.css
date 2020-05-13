@@ -1,0 +1,6 @@
+div[class^="pageContent_"] {
+  max-width: 100%;
+}
+p {
+  background-color: #ff0000;
+}

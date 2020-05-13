@@ -1,0 +1,715 @@
+<div>
+  document.domain = document.domain; window.PARSELY = window.PARSELY || {
+  autotrack: false };
+</div>
+<div><br /></div>
+<div>
+  <a
+    href="https://medium.com/m/signin?operation=login&amp;redirect=https%3A%2F%2Fmedium.com%2Fswlh%2Fcreate-a-react-custom-hooks-for-your-web-components-f4319bb4bc35&amp;source=post_page-----f4319bb4bc35----------------------"
+    rel="noopener noreferrer"
+    target="_blank"
+    >Sign in</a
+  >
+</div>
+<div>
+  <a
+    href="/swlh?source=post_page-----f4319bb4bc35----------------------"
+    rel="noopener noreferrer"
+    target="_blank"
+    ><img src="https://miro.medium.com/max/422/1*IOJrKVmLnRcFz3E_KrrN_Q.png"
+  /></a>
+</div>
+<ul>
+  <li>
+    <a
+      href="/swlh/write-to-express-not-to-impress-465d628f39fe?source=post_page-----f4319bb4bc35----------------------"
+      rel="noopener noreferrer"
+      target="_blank"
+      >Top Story</a
+    >
+  </li>
+  <li>
+    <a
+      href="https://medium.com/swlh/medium-tips-and-tricks/home?source=post_page-----f4319bb4bc35----------------------"
+      rel="noopener noreferrer"
+      target="_blank"
+      >Medium Tips</a
+    >
+  </li>
+  <li>
+    <a
+      href="/swlh/when-one-upvote-is-worth-a-thousand-visitors-3e8ed27bcd3e?source=post_page-----f4319bb4bc35----------------------"
+      rel="noopener noreferrer"
+      target="_blank"
+      >Submit</a
+    >
+  </li>
+</ul>
+<h1>Create A React Custom Hooks For Your Web Components</h1>
+<h2>
+  How to create a React custom hooks to bind your Web Components events with
+  useEffect
+</h2>
+<div><br /></div>
+<div>
+  <a
+    href="/@david.dalbusco?source=post_page-----f4319bb4bc35----------------------"
+    rel="noopener noreferrer"
+    target="_blank"
+    ><img
+      src="https://miro.medium.com/fit/c/96/96/1*dB2O3mMPNqKGeIaBsjXQBQ.jpeg"
+  /></a>
+</div>
+<div>
+  <a
+    href="/@david.dalbusco?source=post_page-----f4319bb4bc35----------------------"
+    rel="noopener noreferrer"
+    target="_blank"
+    >David Dal Busco</a
+  >
+</div>
+<div>Follow</div>
+<div>
+  <a
+    href="/swlh/create-a-react-custom-hooks-for-your-web-components-f4319bb4bc35?source=post_page-----f4319bb4bc35----------------------"
+    rel="noopener noreferrer"
+    target="_blank"
+    >Feb 12</a
+  >· 5 min read
+</div>
+<div><br /></div>
+<div><br /></div>
+<div><br /></div>
+<div><br /></div>
+<div>
+  <img
+    src="https://miro.medium.com/max/60/1*5KdZblpLM1bckDE3zr4kFA.jpeg?q=20"
+  />
+</div>
+<div>
+  &lt;img class="s t u hu ai"
+  src="https://miro.medium.com/max/6176/1*5KdZblpLM1bckDE3zr4kFA.jpeg"
+  width="3088" height="2056" srcset="
+  https://miro.medium.com/max/552/1*5KdZblpLM1bckDE3zr4kFA.jpeg 276w,
+  https://miro.medium.com/max/1104/1*5KdZblpLM1bckDE3zr4kFA.jpeg 552w,
+  https://miro.medium.com/max/1280/1*5KdZblpLM1bckDE3zr4kFA.jpeg 640w,
+  https://miro.medium.com/max/1400/1*5KdZblpLM1bckDE3zr4kFA.jpeg 700w "
+  sizes="700px" role="presentation" /&gt;
+</div>
+<div>
+  Photo by
+  <a
+    href="https://unsplash.com/@thenightstxlker?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText"
+    rel="noopener noreferrer"
+    target="_blank"
+    >Tamara Gore</a
+  >
+  on
+  <a
+    href="https://unsplash.com/?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText"
+    rel="noopener noreferrer"
+    target="_blank"
+    >Unsplash</a
+  >
+</div>
+<div>
+  When I walk up this morning, I said to myself: “Look David, now is the day,
+  you should try to develop a
+  <a href="https://reactjs.org" rel="noopener noreferrer" target="_blank"
+    >React</a
+  >
+  custom hooks”.
+</div>
+<div>
+  The experiment went well and was implemented faster than I expected, therefore
+  I thought I could take some time to write about it 😁.
+</div>
+<h1>Introduction</h1>
+<div>
+  Web Components are working everywhere, period. That being said, when used in
+  React, the implementation tends to become a bit more verbose, notably because
+  events have to be attached “manually”. For example, you would not be able
+  <strong>out of the box</strong> with a
+  <a href="https://stenciljs.com" rel="noopener noreferrer" target="_blank"
+    >Stencil</a
+  >
+  Web Component to do the following.
+</div>
+<div>&lt;my-component</div>
+<div>onMyEvent={($event) =&gt; console.log($event)}&gt;</div>
+<div>&lt;/my-component&gt;</div>
+<div>
+  To overcome this issue, you could bundle your Web Component with their related
+  output targets using the
+  <a
+    href="https://github.com/ionic-team/stencil-ds-plugins"
+    rel="noopener noreferrer"
+    target="_blank"
+    >stencil-ds-plugins</a
+  >
+  and the problem is solved. But if you don’t, or can’t, then you have to
+  manually register event listeners which, as I said above, could quickly become
+  a bit verbose.
+</div>
+<div>const ref = useRef();ref.current.addEventListener('myEvent',</div>
+<div>
+  ($event) =&gt; console.log($event));&lt;my-component
+  ref={ref}&gt;&lt;/my-component&gt;
+</div>
+<div>
+  Fortunately, it is possible to create custom hooks and therefore possible to
+  create reusable pieces of code for our application to make it more readable.
+</div>
+<h1>Let’s Get Started</h1>
+<div>
+  For the purpose of this article we are going to start with the very begin, by
+  creating a new React app.
+</div>
+<div>$ npx create-react-app custom-hook-app</div>
+<div>$ cd custom-hook-app</div>
+<div>
+  We want to experiment Web Component, let’s now install one to our application.
+  For example, we can use the
+  <a
+    href="https://docs.deckdeckgo.com/components/color"
+    rel="noopener noreferrer"
+    target="_blank"
+    >color picker</a
+  >
+  of our web open source editor for presentations,
+  <a href="https://deckdeckgo.com" rel="noopener noreferrer" target="_blank"
+    >DeckDeckGo</a
+  >.
+</div>
+<div>$ npm install @deckdeckgo/color</div>
+<div>
+  Once installed, we can import and declare it in you application respectively
+  in src/App.js .
+</div>
+<div>import React, {useEffect, useRef, useState} from 'react';</div>
+<div>import logo from './logo.svg';</div>
+<div>
+  import './App.css';import {defineCustomElements} from
+  '@deckdeckgo/color/dist/loader';
+</div>
+<div>defineCustomElements(window);</div>
+<div><br /></div>
+<div>function App() {</div>
+<div><br /></div>
+<div>return (</div>
+<div>&lt;div className="App"&gt;</div>
+<div>
+  &lt;header className="App-header"&gt;
+  &lt;deckgo-color&gt;&lt;/deckgo-color&gt;
+</div>
+<div><br /></div>
+<div>&lt;img src={logo} className="App-logo"</div>
+<div>alt="logo"/&gt;</div>
+<div>&lt;p&gt;</div>
+<div>Edit &lt;code&gt;src/App.js&lt;/code&gt; and save to reload.</div>
+<div>&lt;/p&gt;</div>
+<div>&lt;a</div>
+<div>className="App-link"</div>
+<div>href="https://reactjs.org"</div>
+<div>target="_blank"</div>
+<div>rel="noopener noreferrer"</div>
+<div>&gt;</div>
+<div>Learn React</div>
+<div>&lt;/a&gt;</div>
+<div>&lt;/header&gt;</div>
+<div>&lt;/div&gt;</div>
+<div>);</div>
+<div>}</div>
+<div><br /></div>
+<div>export default App;</div>
+<div>
+  If everything went according plan, once we run (npm run start ) our
+  application, the default sample page with our color picker should be rendered.
+</div>
+<div>
+  <img
+    src="https://miro.medium.com/freeze/max/54/1*UkXaxAlAOLW955WUmaLm2g.gif?q=20"
+  />
+</div>
+<div>
+  &lt;img class="s t u hu ai"
+  src="https://miro.medium.com/max/1200/1*UkXaxAlAOLW955WUmaLm2g.gif"
+  width="600" height="677" srcset="
+  https://miro.medium.com/max/552/1*UkXaxAlAOLW955WUmaLm2g.gif 276w,
+  https://miro.medium.com/max/1104/1*UkXaxAlAOLW955WUmaLm2g.gif 552w,
+  https://miro.medium.com/max/1200/1*UkXaxAlAOLW955WUmaLm2g.gif 600w "
+  sizes="600px" role="presentation" /&gt;
+</div>
+<h1>Implement The Events Listener</h1>
+<div>
+  Before creating our custom hooks, let’s first implement the events listener as
+  we would do without it. We create a reference useRef for our component and a
+  state to render the selected color.
+</div>
+<div>const colorRef = useRef();</div>
+<div><br /></div>
+<div>const [color, setColor] = useState();return (</div>
+<div>&lt;div className="App"&gt;</div>
+<div>&lt;header className="App-header"&gt;</div>
+<div>&lt;deckgo-color ref={colorRef}&gt;&lt;/deckgo-color&gt;</div>
+<div><br /></div>
+<div>&lt;img src={logo} className="App-logo"</div>
+<div>alt="logo" style={{background: color}}/&gt;</div>
+<div>&lt;/header&gt;</div>
+<div>&lt;/div&gt;</div>
+<div>);</div>
+<div>
+  Finally, to attach the events, we use the hooks useEffect to bind these when
+  our component’s reference is ready.
+</div>
+<div>useEffect(() =&gt; {</div>
+<div>const ref = colorRef.current;</div>
+<div><br /></div>
+<div>const colorListener = ($event) =&gt; {</div>
+<div>// $event.detail.hex is the selected color</div>
+<div>setColor($event.detail.hex);</div>
+<div>}; // attach the event to the component</div>
+<div>
+  ref.addEventListener('colorChange', colorListener, false); // remove event on
+  component unmount
+</div>
+<div>return () =&gt; {</div>
+<div>ref.removeEventListener('colorChange', colorListener, true);</div>
+<div>}</div>
+<div>}, [colorRef]);</div>
+<div>
+  I’m agree, not the best UX I ever developed 🤣, but still, we should now be
+  able to select colors and apply them to the background of the React logo.
+</div>
+<div>
+  <img
+    src="https://miro.medium.com/freeze/max/54/1*sCVKl0QyIYWC0quTalcgzg.gif?q=20"
+  />
+</div>
+<div>
+  &lt;img class="s t u hu ai"
+  src="https://miro.medium.com/max/1200/1*sCVKl0QyIYWC0quTalcgzg.gif"
+  width="600" height="677" srcset="
+  https://miro.medium.com/max/552/1*sCVKl0QyIYWC0quTalcgzg.gif 276w,
+  https://miro.medium.com/max/1104/1*sCVKl0QyIYWC0quTalcgzg.gif 552w,
+  https://miro.medium.com/max/1200/1*sCVKl0QyIYWC0quTalcgzg.gif 600w "
+  sizes="600px" role="presentation" /&gt;
+</div>
+<h1>Create A Custom Hooks</h1>
+<div>
+  Time to have fun by refactoring our previous implementation in order to create
+  a custom hooks. Firstly, we create a function, the hooks itself, which takes
+  the reference to the component as parameter, contains and return a new state.
+</div>
+<div>function useColorChange(paramColorRef) {</div>
+<div>const [data, setData] = useState(undefined); return [data];</div>
+<div>}</div>
+<div>
+  To complete our hooks, we move our previous useEffect code to this new hooks
+  and we adjust the component states to the hooks states. The effect watches the
+  reference passed as parameters and the listener applies the selected color to
+  the hooks state.
+</div>
+<div>function useColorChange(paramColorRef) {</div>
+<div>const [data, setData] = useState(undefined);</div>
+<div><br /></div>
+<div>useEffect(() =&gt; {</div>
+<div>const ref = paramColorRef.current;</div>
+<div><br /></div>
+<div>const colorListener = ($event) =&gt; {</div>
+<div>setData($event.detail.hex);</div>
+<div>};</div>
+<div><br /></div>
+<div>ref.addEventListener('colorChange', colorListener, false);</div>
+<div><br /></div>
+<div>return () =&gt; {</div>
+<div>ref.removeEventListener('colorChange',</div>
+<div>colorListener, true);</div>
+<div>};</div>
+<div>}, [paramColorRef]);</div>
+<div><br /></div>
+<div>return [data];</div>
+<div>}</div>
+<div>
+  Finally, we use our hooks in our application respectively we replace the
+  previous useState and useEffect.
+</div>
+<div>function App() {</div>
+<div>const colorRef = useRef();</div>
+<div><br /></div>
+<div>const [color] = useColorChange(colorRef);</div>
+<div><br /></div>
+<div>return (</div>
+<div>&lt;div className="App"&gt;</div>
+<div>
+  &lt;header className="App-header"&gt; &lt;deckgo-color
+  ref={colorRef}&gt;&lt;/deckgo-color&gt;
+</div>
+<div><br /></div>
+<div>&lt;img src={logo} className="App-logo"</div>
+<div>alt="logo" style={{background: color}}/&gt;</div>
+<div>&lt;/header&gt;</div>
+<div>&lt;/div&gt;</div>
+<div>);</div>
+<div>}</div>
+<div>
+  Voilà, isn’t that a cleaner code and pretty cool? And of course, if we redo
+  our test, it should still work out, we should still be able to select a color
+  and apply it to the background of the React logo 😸.
+</div>
+<div>
+  <img
+    src="https://miro.medium.com/freeze/max/54/1*xZ8UwUQcpfn_15YDwmekew.gif?q=20"
+  />
+</div>
+<div>
+  &lt;img class="s t u hu ai"
+  src="https://miro.medium.com/max/1200/1*xZ8UwUQcpfn_15YDwmekew.gif"
+  width="600" height="677" srcset="
+  https://miro.medium.com/max/552/1*xZ8UwUQcpfn_15YDwmekew.gif 276w,
+  https://miro.medium.com/max/1104/1*xZ8UwUQcpfn_15YDwmekew.gif 552w,
+  https://miro.medium.com/max/1200/1*xZ8UwUQcpfn_15YDwmekew.gif 600w "
+  sizes="600px" role="presentation" /&gt;
+</div>
+<h1>Feedback</h1>
+<div>
+  Following the publication of this article,
+  <a
+    href="https://twitter.com/chris_rohrer"
+    rel="noopener noreferrer"
+    target="_blank"
+    >Christoph Rohrer</a
+  >
+  suggested on
+  <a
+    href="https://twitter.com/chris_rohrer/status/1228208789897138182"
+    rel="noopener noreferrer"
+    target="_blank"
+    >Twitter</a
+  >, to also move the reference into the custom hooks, as display in his
+  <a
+    href="https://paste.gg/p/anonymous/cb49ddd313574f95b48bcee3ea043eff"
+    rel="noopener noreferrer"
+    target="_blank"
+    >solution</a
+  >. It makes the code even more readable. Thank you Christoph for the great
+  idea 👍
+</div>
+<h1>Conclusion</h1>
+<div>
+  I don’t pretend that the above implementation is the best one, my goal was to
+  try to build a React custom hooks out and to share a comprehensive step by
+  step blog post. I’m pretty sure it could be improved and I would be super
+  duper happy to hear your suggestions about it, ping me with your comments!
+</div>
+<div>To infinity and beyond 🚀</div>
+<div>David</div>
+<h2>
+  <a
+    href="/swlh?source=post_sidebar--------------------------post_sidebar-"
+    rel="noopener noreferrer"
+    target="_blank"
+    >The Startup</a
+  >
+</h2>
+<h4>
+  Medium's largest active publication, followed by +631K people. Follow to join
+  our community.
+</h4>
+<div>Follow</div>
+<div><br /></div>
+<h4>90</h4>
+<ul>
+  <li>
+    <a href="/tag/programming" rel="noopener noreferrer" target="_blank"
+      >Programming</a
+    >
+  </li>
+  <li>
+    <a href="/tag/javascript" rel="noopener noreferrer" target="_blank"
+      >JavaScript</a
+    >
+  </li>
+  <li>
+    <a
+      href="/tag/front-end-development"
+      rel="noopener noreferrer"
+      target="_blank"
+      >Front End Development</a
+    >
+  </li>
+  <li>
+    <a href="/tag/react" rel="noopener noreferrer" target="_blank">React</a>
+  </li>
+  <li>
+    <a href="/tag/web-development" rel="noopener noreferrer" target="_blank"
+      >Web Development</a
+    >
+  </li>
+</ul>
+<div><br /></div>
+<h4>90 claps</h4>
+<div><br /></div>
+<div><br /></div>
+<div><br /></div>
+<div><br /></div>
+<div><br /></div>
+<div>
+  <a
+    href="/@david.dalbusco?source=follow_footer--------------------------follow_footer-"
+    rel="noopener noreferrer"
+    target="_blank"
+    ><img
+      src="https://miro.medium.com/fit/c/160/160/1*dB2O3mMPNqKGeIaBsjXQBQ.jpeg"
+  /></a>
+</div>
+<div>Written by</div>
+<h2>
+  <a
+    href="/@david.dalbusco?source=follow_footer--------------------------follow_footer-"
+    rel="noopener noreferrer"
+    target="_blank"
+    >David Dal Busco</a
+  >
+</h2>
+<div>Follow</div>
+<h4>
+  Freelancer by day | Creator of DeckDeckGo by night | Organizer of the Ionic
+  Zürich Meetup
+</h4>
+<div>Follow</div>
+<div>
+  <a
+    href="/swlh?source=follow_footer--------------------------follow_footer-"
+    rel="noopener noreferrer"
+    target="_blank"
+    ><img
+      src="https://miro.medium.com/fit/c/160/160/1*Xd2uZaVHfrGOP14W_3UQRg.jpeg"
+  /></a>
+</div>
+<h2>
+  <a
+    href="/swlh?source=follow_footer--------------------------follow_footer-"
+    rel="noopener noreferrer"
+    target="_blank"
+    >The Startup</a
+  >
+</h2>
+<div>Follow</div>
+<h4>
+  Medium's largest active publication, followed by +631K people. Follow to join
+  our community.
+</h4>
+<div>Follow</div>
+<div>
+  <a
+    href="https://medium.com/p/f4319bb4bc35/responses/show?source=follow_footer--------------------------follow_footer-"
+    rel="noopener noreferrer"
+    target="_blank"
+    >Write the first response</a
+  >
+</div>
+<h2>More From Medium</h2>
+<h4>More from The Startup</h4>
+<div><br /></div>
+<h4>More from The Startup</h4>
+<h3>
+  <a
+    href="/swlh/prepare-for-the-death-rebirth-of-hollywood-f3853aacbee0?source=post_recirc---------0------------------"
+    rel="noopener noreferrer"
+    target="_blank"
+    >Prepare For The Death &amp; Rebirth of Hollywood</a
+  >
+</h3>
+<div>
+  <a
+    href="/@RichardJanes?source=post_recirc---------0------------------"
+    rel="noopener noreferrer"
+    target="_blank"
+    >Richard Janes</a
+  >in
+  <a
+    href="/swlh?source=post_recirc---------0------------------"
+    rel="noopener noreferrer"
+    target="_blank"
+    >The Startup</a
+  >
+</div>
+<div>
+  <a
+    href="/swlh/prepare-for-the-death-rebirth-of-hollywood-f3853aacbee0?source=post_recirc---------0------------------"
+    rel="noopener noreferrer"
+    target="_blank"
+    >Apr 30</a
+  >· 18 min read
+</div>
+<div><br /></div>
+<h4>1.7K</h4>
+<div><br /></div>
+<h4>More from The Startup</h4>
+<div><br /></div>
+<h4>More from The Startup</h4>
+<h3>
+  <a
+    href="/swlh/what-programming-language-has-the-happiest-developers-f0636b08e898?source=post_recirc---------1------------------"
+    rel="noopener noreferrer"
+    target="_blank"
+    >What programming language has the happiest developers?</a
+  >
+</h3>
+<div>
+  <a
+    href="/@janjilecek?source=post_recirc---------1------------------"
+    rel="noopener noreferrer"
+    target="_blank"
+    >Ing. Jan Jileček</a
+  >in
+  <a
+    href="/swlh?source=post_recirc---------1------------------"
+    rel="noopener noreferrer"
+    target="_blank"
+    >The Startup</a
+  >
+</div>
+<div>
+  <a
+    href="/swlh/what-programming-language-has-the-happiest-developers-f0636b08e898?source=post_recirc---------1------------------"
+    rel="noopener noreferrer"
+    target="_blank"
+    >May 1</a
+  >· 3 min read
+</div>
+<div><br /></div>
+<h4>3.5K</h4>
+<div><br /></div>
+<h4>More from The Startup</h4>
+<div><br /></div>
+<h4>More from The Startup</h4>
+<h3>
+  <a
+    href="/swlh/a-design-analysis-of-cloud-based-microservices-architecture-at-netflix-98836b2da45f?source=post_recirc---------2------------------"
+    rel="noopener noreferrer"
+    target="_blank"
+    >A Design Analysis of Cloud-based Microservices Architecture at Netflix</a
+  >
+</h3>
+<div>
+  <a
+    href="/@caoducnguyen?source=post_recirc---------2------------------"
+    rel="noopener noreferrer"
+    target="_blank"
+    >Cao Duc Nguyen</a
+  >in
+  <a
+    href="/swlh?source=post_recirc---------2------------------"
+    rel="noopener noreferrer"
+    target="_blank"
+    >The Startup</a
+  >
+</div>
+<div>
+  <a
+    href="/swlh/a-design-analysis-of-cloud-based-microservices-architecture-at-netflix-98836b2da45f?source=post_recirc---------2------------------"
+    rel="noopener noreferrer"
+    target="_blank"
+    >May 1</a
+  >· 19 min read
+</div>
+<div><br /></div>
+<h4>1.4K</h4>
+<div><br /></div>
+<h4>
+  <a
+    href="/about?autoplay=1&amp;source=post_page-----f4319bb4bc35----------------------"
+    rel="noopener noreferrer"
+    target="_blank"
+    >Discover Medium</a
+  >
+</h4>
+<div>
+  Welcome to a place where words matter. On Medium , smart voices and original
+  ideas take center stage - with no ads in sight.
+  <a
+    href="/about?autoplay=1&amp;source=post_page-----f4319bb4bc35----------------------"
+    rel="noopener noreferrer"
+    target="_blank"
+    >Watch</a
+  >
+</div>
+<h4>
+  <a
+    href="https://medium.com/topics?source=post_page-----f4319bb4bc35----------------------"
+    rel="noopener noreferrer"
+    target="_blank"
+    >Make Medium yours</a
+  >
+</h4>
+<div>
+  Follow all the topics you care about, and we’ll deliver the best stories for
+  you to your homepage and inbox.
+  <a
+    href="https://medium.com/topics?source=post_page-----f4319bb4bc35----------------------"
+    rel="noopener noreferrer"
+    target="_blank"
+    >Explore</a
+  >
+</div>
+<h4>
+  <a
+    href="/membership?source=post_page-----f4319bb4bc35----------------------"
+    rel="noopener noreferrer"
+    target="_blank"
+    >Become a member</a
+  >
+</h4>
+<div>
+  Get unlimited access to the best stories on Medium — and support writers while
+  you’re at it. Just $5/month.
+  <a
+    href="/membership?source=post_page-----f4319bb4bc35----------------------"
+    rel="noopener noreferrer"
+    target="_blank"
+    >Upgrade</a
+  >
+</div>
+<h4>
+  <a
+    href="/about?autoplay=1&amp;source=post_page-----f4319bb4bc35----------------------"
+    rel="noopener noreferrer"
+    target="_blank"
+    >About</a
+  >
+</h4>
+<h4>
+  <a
+    href="https://help.medium.com/?source=post_page-----f4319bb4bc35----------------------"
+    rel="noopener noreferrer"
+    target="_blank"
+    >Help</a
+  >
+</h4>
+<h4>
+  <a
+    href="/policy/9db0094a1e0f?source=post_page-----f4319bb4bc35----------------------"
+    rel="noopener noreferrer"
+    target="_blank"
+    >Legal</a
+  >
+</h4>
+<h4>Get the Medium app</h4>
+<div>
+  <a
+    href="https://itunes.apple.com/app/medium-everyones-stories/id828256236?pt=698524&amp;mt=8&amp;ct=post_page&amp;source=post_page-----f4319bb4bc35----------------------"
+    rel="noopener noreferrer"
+    target="_blank"
+    ><img src="https://miro.medium.com/max/270/1*M2FVPPidy2x386MRAE-EeA.png"
+  /></a>
+</div>
+<div>
+  <a
+    href="https://play.google.com/store/apps/details?id=com.medium.reader&amp;source=post_page-----f4319bb4bc35----------------------"
+    rel="noopener noreferrer"
+    target="_blank"
+    ><img src="https://miro.medium.com/max/270/1*HyH8oIcJvXp7xzu5oF6dTg.png"
+  /></a>
+</div>

@@ -1,0 +1,13 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "nw-technical-qand-a-client-side-solution",
+    "id": "25fe0f35-c1c8-4f73-a263-bd00af69483f",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "isDomainIsolated": false
+  },
+  "paths": {
+    "zippedPackage": "solution/nw-technical-qand-a.sppkg"
+  }
+}
