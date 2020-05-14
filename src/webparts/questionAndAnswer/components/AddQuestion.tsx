@@ -93,18 +93,6 @@ const AddQuestion = (props) => {
 
   function saveOnClick() {}
 
-  function codeOnClick() {
-    let soueceCodeStr =
-      "<div class='mydiv'><div style={{backgroudColor:'red'}}>Top sample content</div><div class='bottom'>Bottom sample content</div></div>";
-    // const qlEditor = document.querySelector(".ql-editor");
-    // const myDiv = document.createElement("div");
-    // myDiv.innerHTML = soueceCodeStr;
-    // qlEditor.appendChild(myDiv);
-    //qlEditor.innerHTML = soueceCodeStr;
-    //setEditorHtml(text);
-    props.context.propertyPane.open();
-  }
-
   function renderEditorContent() {
     return { __html: "" + editorHtml ? editorHtml : "" + "" };
   }
@@ -132,6 +120,7 @@ const AddQuestion = (props) => {
         onChange={(evt, val) => setDescriptionText(val)}
       /> */}
           <Editor
+            {...props}
             placeholder={"Write something..."}
             initialValue={editorHtml}
             updateParentHtml={updateEditorHtml}
@@ -154,15 +143,14 @@ const AddQuestion = (props) => {
           {/* <PrimaryButton className={styles.btns} onClick={() => saveOnClick()}>
             Save
           </PrimaryButton> */}
-          <PrimaryButton className={styles.btns} onClick={() => codeOnClick()}>
-            Insert Source Code
-          </PrimaryButton>
         </div>
       )) || (
-        <div
-          className={styles.viewContainer}
-          dangerouslySetInnerHTML={renderEditorContent()}
-        />
+        <div className="ql-snow">
+          <div
+            className={["ql-editor", "publishMode"].join(" ")}
+            dangerouslySetInnerHTML={renderEditorContent()}
+          />
+        </div>
       )}
     </div>
   );
