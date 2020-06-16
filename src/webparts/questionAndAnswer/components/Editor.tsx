@@ -5,11 +5,23 @@ import "react-quill-2/dist/quill.snow.css";
 import "./quill.table.scss";
 import * as PropTypes from "prop-types";
 import styles from "./QuestionAndAnswer.module.scss";
-import { Icon } from "office-ui-fabric-react/lib/Icon";
+import { Icon } from "office-ui-fabric-react";
+
+// import { htmlEditButton } from "./quill.htmlEditButton.js";
+// let htmlBtn = new htmlEditButton(this.quill);
+// Quill.register("modules/htmlEditButton", htmlBtn);
 
 // var Block = Quill.import("blots/block");
 // Block.tagName = "DIV";
 // Quill.register(Block, true);
+
+var Block = Quill.import("blots/block");
+class Div extends Block {}
+Div.tagName = "div";
+Div.blotName = "div";
+Div.allowedChildren = Block.allowedChildren;
+Div.allowedChildren.push(Block);
+Quill.register(Div, true);
 
 Quill.register(
   {
@@ -18,7 +30,9 @@ Quill.register(
   true
 );
 
-let self: any = null;
+var self: any = null;
+var myQuill: any = null;
+var Delta = Quill.import("delta");
 
 // var Parchment = Quill.import('parchment');
 // var TokenClass = new Parchment.Attributor.Class('token', 'token', {
@@ -38,7 +52,6 @@ const CustomButtonSrcCode = () => (
 );
 
 function table() {
-  //debugger;
   let tableModule = this.quill.getModule("better-table");
   tableModule.insertTable(3, 3);
 }
@@ -54,6 +67,7 @@ function link(value) {
 
 function insertSourceCode() {
   self.props.context.propertyPane.open();
+  myQuill = this.quill;
 }
 
 const CustomToolbar = () => (
@@ -90,15 +104,39 @@ const CustomToolbar = () => (
   </div>
 );
 
+function customDiv(node, delta) {
+  console.log("customDiv delta: ", delta);
+  // let returnValue = delta.compose(
+  //   new Delta().retain(delta.length(), {
+  //     "table-cell-line": false,
+  //     div: true,
+  //   })
+  // );
+  // console.log("returnValue: ", returnValue);
+  return delta.compose(
+    new Delta().retain(delta.length(), {
+      "table-cell-line": false,
+      div: true,
+    })
+  );
+}
+function customh1(node, delta) {
+  return delta.compose(new Delta().retain(delta.length(), { header: true }));
+}
+function customStyle(node, delta) {
+  return delta; //delta.compose(new Delta().retain(delta.length(), { header: true }));
+}
+function customScript(node, delta) {
+  return delta.compose(new Delta().retain(delta.length(), { header: true }));
+}
+
 export default class Editor extends React.Component<any, any> {
   public static formats: string[];
   public static propTypes: { placeholder: any };
   public static modules: {
     //table: Boolean;
     //markdownShortcuts: any;
-    // htmlEditButton: any;
-    //'better-table':any;
-    //tableUI: Boolean;
+    //htmlEditButton: any;
     "better-table": {
       operationMenu: {
         items: {
@@ -122,7 +160,7 @@ export default class Editor extends React.Component<any, any> {
     //toolbar: any;
     clipboard: {
       matchVisual: boolean;
-      //matchers: any[];
+      matchers: any[];
       // onCapturePaste: (val) => void;
     };
   };
@@ -140,7 +178,14 @@ export default class Editor extends React.Component<any, any> {
 
   public componentWillReceiveProps(props) {
     console.log("componentWillReceiveProps", props.initialValue);
-    this.setState({ editorHtml: props.initialValue });
+    if (this.state.editorHtml != props.initialValue) {
+      if (myQuill) {
+        let content = myQuill.getSemanticHTML();
+        //myQuill.container.querySelector(".ql-editor").innerHTML = props.initialValue;
+      } //else {
+      this.setState({ editorHtml: props.initialValue });
+      //}
+    }
   }
 
   public handleChange(content, delta, source, editor) {
@@ -175,6 +220,12 @@ export default class Editor extends React.Component<any, any> {
 
 Editor.modules = {
   //table: false,
+  // htmlEditButton: {
+  //   debug: true, // logging, default:false
+  //   msg: "Edit the content in HTML format", //Custom message to display in the editor, default: Edit HTML here, when you click "OK" the quill editor's contents will be replaced
+  //   okText: "Ok", // Text to display in the OK button, default: Ok,
+  //   cancelText: "Cancel", // Text to display in the cancel button, default: Cancel
+  // },
   "better-table": {
     operationMenu: {
       items: {
@@ -199,6 +250,12 @@ Editor.modules = {
   clipboard: {
     // toggle to add extra line breaks when pasting HTML:
     matchVisual: false,
+    matchers: [
+      ["div", customDiv],
+      // ["h1", customh1],
+      // ["style", customStyle],
+      // ["script", customScript],
+    ],
   },
 };
 /*

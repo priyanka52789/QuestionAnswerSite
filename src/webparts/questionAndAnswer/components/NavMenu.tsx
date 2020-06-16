@@ -1,7 +1,7 @@
 import * as React from "react";
 import styles from "./QuestionAndAnswer.module.scss";
 import { Link } from "react-router-dom";
-import { Nav, INavLink, INavStyles } from "office-ui-fabric-react/lib/Nav";
+import { Nav, INavLink, INavStyles } from "office-ui-fabric-react";
 
 const navStyles: Partial<INavStyles> = {
   root: {

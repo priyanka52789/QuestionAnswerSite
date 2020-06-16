@@ -1,16 +1,13 @@
 import * as React from "react";
-import {
-  FocusZone,
-  FocusZoneDirection,
-} from "office-ui-fabric-react/lib/FocusZone";
-import { List } from "office-ui-fabric-react/lib/List";
-import { Image, ImageFit } from "office-ui-fabric-react/lib/Image";
+import { FocusZone, FocusZoneDirection } from "office-ui-fabric-react";
+import { List } from "office-ui-fabric-react";
+import { Image, ImageFit } from "office-ui-fabric-react";
 import {
   ITheme,
   mergeStyleSets,
   getTheme,
   getFocusStyle,
-} from "office-ui-fabric-react/lib/Styling";
+} from "office-ui-fabric-react";
 import { Link } from "react-router-dom";
 import {
   PRIMARYDESCRIPTIONCOL,
@@ -119,7 +116,9 @@ export const QuestionsList = (props) => {
             {item.title}
           </div>
           <div className={classNames.itemIndex}>
-            <Link to={`/Question/${index}`}>Go to Question {index}</Link>
+            <Link to={`/Question/${index}`} target="_blank">
+              Go to Question {index}{" "}
+            </Link>
           </div>
         </div>
       </div>

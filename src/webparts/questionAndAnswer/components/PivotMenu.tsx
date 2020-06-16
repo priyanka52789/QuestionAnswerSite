@@ -1,9 +1,5 @@
 import * as React from "react";
-import {
-  Pivot,
-  PivotItem,
-  IPivotItemProps,
-} from "office-ui-fabric-react/lib/Pivot";
+import { Pivot, PivotItem, IPivotItemProps } from "office-ui-fabric-react";
 
 const getTabId = (itemKey: string) => {
   return `ShapeColorPivot_${itemKey}`;
